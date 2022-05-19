@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 
 // 判断值是否为0
-export const isFalsy = value => (value === 0 ? false : !value);
+export const isFalsy = (value: any) => (value === 0 ? false : !value);
 
 // 清除对象中value为空的key-value
-export const cleanObject = object => {
+export const cleanObject = (object: object) => {
   // Object.assign({},object) 1
   const result = { ...object };
   Object.keys(result).forEach(key => {
+    // @ts-ignore
     const value = object[key];
     if (isFalsy(value)) {
+      // @ts-ignore
       delete result[key];
     }
   });
@@ -18,13 +20,13 @@ export const cleanObject = object => {
 };
 
 // 自定义hook  以use开头
-export const useMount = callback => {
+export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
   }, []);
 };
 
-export const useDebounce = (value, delay) => {
+export const useDebounce = (value: any, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
     // 每次在value变化以后 设置一个定时器
