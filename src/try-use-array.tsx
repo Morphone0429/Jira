@@ -1,4 +1,4 @@
-import { useMount } from 'utils';
+import { useArray, useMount } from 'utils';
 
 export const TsReactTest = () => {
   const persons: { name: string; age: number }[] = [
@@ -11,7 +11,7 @@ export const TsReactTest = () => {
 
   return (
     <div>
-      <button onClick={() => add({ name: 'john,age:22' })}>add john</button>
+      <button onClick={() => add({ name: 'john', age: 22 })}>add john</button>
       <button onClick={() => removeIndex(0)}>remove 0</button>
       <button style={{ marginBottom: '50px' }} onClick={() => clear()}>
         clear
