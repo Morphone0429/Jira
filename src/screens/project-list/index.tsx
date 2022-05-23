@@ -1,28 +1,40 @@
-import { useState, useEffect } from "react";
-import { List } from "./list";
-import { SearchPanel } from "./search-panel";
-import { cleanObject, useDebounce, useMount } from "utils";
-import { useHttp } from "utils/http";
+import { useState, useEffect } from 'react';
+import { SearchPanel } from './search-panel';
+import { List } from './list';
+import { cleanObject, useDebounce } from 'utils';
+import * as qs from 'qs';
+import { useMount } from '../../utils';
+
+const apiUrl = process.env.REACT_APP_API_URL; // 通过打包命令会读取不同的接口变量 .env
 
 export const ProjectListScreen = () => {
   const [param, setParam] = useState({
-    name: "",
-    personId: "",
+    name: '',
+    personId: '',
   });
+  const debounceParam = useDebounce(param, 2000);
   const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
-  const client = useHttp();
-  const debouncedParam = useDebounce(param, 200);
   useEffect(() => {
-    client("projects", { data: cleanObject(debouncedParam) }).then(setList);
-    // eslint-disable-next-line
-  }, [debouncedParam]);
+    // fetch(`${apiUrl}/projects?name=${param.name}&personId=${param.personId}`);
+    fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`).then(async res => {
+      if (res.ok) {
+        setList(await res.json());
+      }
+    });
+  }, [debounceParam]);
+
   useMount(() => {
-    client("users").then(setUsers);
+    fetch(`${apiUrl}/users`).then(async res => {
+      if (res.ok) {
+        setUsers(await res.json());
+      }
+    });
   });
+
   return (
     <div>
-      <SearchPanel users={users} param={param} setParam={setParam} />
+      <SearchPanel param={param} setParam={setParam} users={users} />
       <List list={list} users={users} />
     </div>
   );
