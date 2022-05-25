@@ -19,7 +19,7 @@ AuthContext.displayName = 'AuthContext';
 
 const AuthProVider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const login = (form: AuthForm) => auth.login(form).then(setUser); // point free  消参
+  const login = (form: AuthForm) => auth.login(form).then(setUser); // point free  消参  setUser ===  user => setUser(user)
   const register = (form: AuthForm) => auth.register(form).then(user => setUser(user));
   const logout = () => auth.logout().then(() => setUser(null));
   return <AuthContext.Provider children={children} value={{ user, login, register, logout }}></AuthContext.Provider>;
