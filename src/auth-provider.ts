@@ -1,6 +1,5 @@
-import { apiUrl } from 'screens/login';
 import { User } from 'screens/project-list/search-panel';
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const localStorageKey = '__auth_provider_token__';
 const getToken = () => window.localStorage.getItem(localStorageKey);
 const handleUserResponse = ({ user }: { user: User }) => {
@@ -8,7 +7,7 @@ const handleUserResponse = ({ user }: { user: User }) => {
   return user;
 };
 const login = (data: { username: string; password: string }) => {
-  fetch(`${apiUrl}/login`, {
+  return fetch(`${apiUrl}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,12 +16,14 @@ const login = (data: { username: string; password: string }) => {
   }).then(async res => {
     if (res.ok) {
       return handleUserResponse(await res.json());
+    } else {
+      return Promise.reject(data);
     }
   });
 };
 
 const register = (data: { username: string; password: string }) => {
-  fetch(`${apiUrl}/register`, {
+  return fetch(`${apiUrl}/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,10 +32,12 @@ const register = (data: { username: string; password: string }) => {
   }).then(async res => {
     if (res.ok) {
       return handleUserResponse(await res.json());
+    } else {
+      return Promise.reject(data);
     }
   });
 };
 
-const logout = () => window.localStorage.removeItem(localStorageKey);
+const logout = async () => window.localStorage.removeItem(localStorageKey);
 
 export { localStorageKey, getToken, handleUserResponse, login, register, logout };

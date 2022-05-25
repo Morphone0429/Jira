@@ -1,20 +1,24 @@
+import { useAuth } from 'context/auth-context';
 import { FormEvent } from 'react';
 
 export const apiUrl = process.env.REACT_APP_API_URL;
 export const LoginScreen = () => {
-  const login = (param: { username: string; password: string }) => {
-    // fetch(`${apiUrl}/projects?name=${param.name}&personId=${param.personId}`);
-    fetch(`${apiUrl}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(param),
-    }).then(async res => {
-      if (res.ok) {
-      }
-    });
-  };
+  // const login = (param: { username: string; password: string }) => {
+  //   // fetch(`${apiUrl}/projects?name=${param.name}&personId=${param.personId}`);
+  //   fetch(`${apiUrl}/register`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(param),
+  //   }).then(async res => {
+  //     if (res.ok) {
+  //     }
+  //   });
+  // };
+
+  const { login, user } = useAuth();
+  // console.log();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,6 +29,7 @@ export const LoginScreen = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      用户名 {user?.name}
       <div>
         <label htmlFor='username'></label>
         <input type='text' id={'username'} />
