@@ -22,12 +22,6 @@ export const ProjectListScreen = () => {
     client('projects', {
       data: cleanObject(debounceParam),
     }).then(setList);
-    // // fetch(`${apiUrl}/projects?name=${param.name}&personId=${param.personId}`);
-    // fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`).then(async res => {
-    //   if (res.ok) {
-    //     setList(await res.json());
-    //   }
-    // });
   }, [debounceParam]);
 
   useMount(() => {
