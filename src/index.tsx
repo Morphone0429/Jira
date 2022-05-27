@@ -4,6 +4,7 @@ import 'index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { loadDevTools } from 'jira-dev-tool';
+import 'antd/dist/antd.less'; // 用于修改主题样式
 import { AppProviders } from 'context';
 loadDevTools(() =>
   ReactDOM.render(

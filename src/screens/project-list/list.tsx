@@ -1,5 +1,6 @@
 import { User } from './search-panel';
-
+import { Table } from 'antd';
+import { spawn } from 'child_process';
 interface ListProps {
   list: Project[];
   users: User[];
@@ -13,23 +14,22 @@ interface Project {
 }
 export const List = ({ list, users }: ListProps) => {
   return (
-    <table>
-      <thead></thead>
-      <tr>
-        <th>名称</th>
-        <th>负责人</th>
-      </tr>
-      <tbody>
-        {list.map(project => {
-          return (
-            <tr key={project.id}>
-              <td>{project.name}</td>
-              {/* ?.  undefined 时返回undefined */}
-              <td>{users.find(user => user.id === project.personId)?.name || '未知'}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <Table
+      pagination={false}
+      columns={[
+        {
+          title: '名称',
+          dataIndex: 'name',
+          sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
+          title: '负责人',
+          render(value, project) {
+            return <span>{users.find(user => user.id === project.personId)?.name || '未知'}</span>;
+          },
+        },
+      ]}
+      dataSource={list}
+    ></Table>
   );
 };
