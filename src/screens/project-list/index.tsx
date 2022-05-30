@@ -17,12 +17,17 @@ export const ProjectListScreen = () => {
   const debounceParam = useDebounce(param, 2000);
   const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<null | Error>(null);
   const client = useHttp();
 
   useEffect(() => {
+    setLoading(true);
     client('projects', {
       data: cleanObject(debounceParam),
-    }).then(setList);
+    })
+      .then(setList)
+      .finally(() => setLoading(false));
   }, [debounceParam]);
 
   useMount(() => {
@@ -32,7 +37,7 @@ export const ProjectListScreen = () => {
   return (
     <Container>
       <SearchPanel param={param} setParam={setParam} users={users} />
-      <List list={list} users={users} />
+      <List dataSource={list} users={users} loading={loading} />
     </Container>
   );
 };
