@@ -5,6 +5,7 @@ import { cleanObject, useDebounce } from 'utils';
 import * as qs from 'qs';
 import { useMount } from '../../utils';
 import { useHttp } from 'utils/http';
+import styled from '@emotion/styled';
 
 const apiUrl = process.env.REACT_APP_API_URL; // 通过打包命令会读取不同的接口变量 .env
 
@@ -29,9 +30,13 @@ export const ProjectListScreen = () => {
   });
 
   return (
-    <div>
+    <Container>
       <SearchPanel param={param} setParam={setParam} users={users} />
       <List list={list} users={users} />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  padding: 3.2rem;
+`;

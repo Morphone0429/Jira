@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
+import { Button, Dropdown, Menu } from 'antd';
 import { Row } from 'components/lib';
 import { useAuth } from 'context/auth-context';
+import { userInfo } from 'os';
 import { ProjectListScreen } from 'screens/project-list';
-
+import { ReactComponent as SoftwareLogo } from './assets/software-logo.svg';
 // flex grid各自的应用场景
 // 1.一维布局还是二维布局   一维->flex  二维->grid
 // 2.从内容出发还是布局出发
@@ -10,17 +12,40 @@ import { ProjectListScreen } from 'screens/project-list';
 // 布局  先规划网格  数量固定   grid
 
 export const AuthenticatedApp = () => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: 'logout',
+          label: (
+            <a href='/#' onClick={logout}>
+              logout
+            </a>
+          ),
+        },
+      ]}
+    />
+  );
+
   return (
     <Container>
-      <Header>
+      <Header between>
         <HeaderLeft>
-          <h3>Logo</h3>
+          {/* <h3>Logo</h3> */}
+          {/* <img src={softwareLogo} alt='' /> */}
+          <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'} />
           <h3>Logo</h3>
           <h3>Logo</h3>
         </HeaderLeft>
         <HeaderRight>
-          <button onClick={logout}>logout</button>
+          {/* <button onClick={logout}>logout</button> */}
+          <Dropdown overlay={menu} placement='bottomLeft'>
+            <a href='/#' onClick={e => e.preventDefault()}>
+              hi {user?.name}
+            </a>
+          </Dropdown>
         </HeaderRight>
       </Header>
       <Main>
