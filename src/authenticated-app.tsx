@@ -20,9 +20,9 @@ export const AuthenticatedApp = () => {
         {
           key: 'logout',
           label: (
-            <a href='/#' onClick={logout}>
-              logout
-            </a>
+            <Button type='link' onClick={logout}>
+              登出
+            </Button>
           ),
         },
       ]}
@@ -40,11 +40,8 @@ export const AuthenticatedApp = () => {
           <h3>Logo</h3>
         </HeaderLeft>
         <HeaderRight>
-          {/* <button onClick={logout}>logout</button> */}
           <Dropdown overlay={menu} placement='bottomLeft'>
-            <a href='/#' onClick={e => e.preventDefault()}>
-              hi {user?.name}
-            </a>
+            <Button type='link'>hi {user?.name}</Button>
           </Dropdown>
         </HeaderRight>
       </Header>

@@ -16,14 +16,7 @@ export const UnauthenticatedApp = () => {
         <Title>{isRegister ? '请注册' : '请登录'}</Title>
         {isRegister ? <RegisterScreen /> : <LoginScreen />}
         <Divider></Divider>
-        <a
-          href="/#"
-          onClick={() => {
-            setIsRegister(!isRegister);
-          }}
-        >
-          {isRegister ? '已经有账号了？直接登录' : '没有账号？注册新账号'}
-        </a>
+        <Button type='link'>{isRegister ? '已经有账号了？直接登录' : '没有账号？注册新账号'}</Button>
       </ShadowCard>
     </Container>
   );
@@ -44,8 +37,7 @@ const Background = styled.div`
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: left bottom, right bottom;
-  background-size: calc(((100vw -40rem) / 2)-3.2rem),
-    calc(((100vw -40rem) / 2)-3.2rem), cover;
+  background-size: calc(((100vw -40rem) / 2)-3.2rem), calc(((100vw -40rem) / 2)-3.2rem), cover;
   background-image: url(${left}), url(${right});
 `;
 

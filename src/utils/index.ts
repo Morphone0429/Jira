@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
 
 // 判断值是否为0
-export const isFalsy = (value: any) => (value === 0 ? false : !value);
+export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
+
+export const isVoid = (value: unknown) => value === undefined || value === null || value === '';
+
+// object: object  返回的是一个空对象
+// let a: object
+// a= {name: 'hha'}
+// a= () =>{}
+// a= new RegExp('')
 
 // 清除对象中value为空的key-value
-export const cleanObject = (object: object) => {
+export const cleanObject = (object: { [key: string]: unknown }) => {
   // Object.assign({},object) 1
   const result = { ...object };
   Object.keys(result).forEach(key => {
-    // @ts-ignore
     const value = object[key];
-    if (isFalsy(value)) {
-      // @ts-ignore
+    if (isVoid(value)) {
       delete result[key];
     }
   });
@@ -23,6 +29,8 @@ export const cleanObject = (object: object) => {
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
+    // todo 依赖项里加上callback  会造成无限循环  这个和useCallback 和 useMemo 有关系
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
