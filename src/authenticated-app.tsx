@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Row } from 'components/lib';
 import { useAuth } from 'context/auth-context';
 import { ProjectListScreen } from 'screens/project-list';
 
@@ -35,27 +36,6 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-export const Row = styled.div<{
-  gap?: number | boolean;
-  between?: boolean;
-  marginBottom?: number;
-}>`
-  display: flex;
-  align-items: center;
-  justify-content: ${(props) => (props.between ? 'space-between' : undefined)};
-  margin-bottom: ${(props) => props.marginBottom + 'rem'};
-  > * {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    margin-right: ${(props) =>
-      typeof props.gap === 'number'
-        ? props.gap + 'rem'
-        : props.gap
-        ? '2rem'
-        : undefined};
-  }
-`;
-
 // grid-area 用来给grid子元素起名字
 const Header = styled(Row)`
   padding: 3.2rem;
@@ -64,7 +44,4 @@ const Header = styled(Row)`
 `;
 const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
-const Main = styled.main`
-  /* display: flex; */
-  /* overflow: hidden; */
-`;
+const Main = styled.main``;
