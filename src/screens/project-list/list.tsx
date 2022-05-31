@@ -6,7 +6,7 @@ interface ListProps extends TableProps<Project> {
   // list: Project[];
   users: User[];
 }
-interface Project {
+export interface Project {
   id: string;
   name: string;
   personId: string;
