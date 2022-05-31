@@ -13,11 +13,11 @@ const login = (data: { username: string; password: string }) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(async res => {
+  }).then(async (res) => {
     if (res.ok) {
       return handleUserResponse(await res.json());
     } else {
-      return Promise.reject(data);
+      return Promise.reject(await res.json());
     }
   });
 };
@@ -29,15 +29,22 @@ const register = (data: { username: string; password: string }) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(async res => {
+  }).then(async (res) => {
     if (res.ok) {
       return handleUserResponse(await res.json());
     } else {
-      return Promise.reject(data);
+      return Promise.reject(await res.json());
     }
   });
 };
 
 const logout = async () => window.localStorage.removeItem(localStorageKey);
 
-export { localStorageKey, getToken, handleUserResponse, login, register, logout };
+export {
+  localStorageKey,
+  getToken,
+  handleUserResponse,
+  login,
+  register,
+  logout,
+};

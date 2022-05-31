@@ -1,11 +1,26 @@
 import { useAuth } from 'context/auth-context';
 import { Form, Input, Button } from 'antd';
 import { LongButton } from 'unauthenticated-app';
+import { useAsync } from 'utils/use-async';
 export const apiUrl = process.env.REACT_APP_API_URL;
-export const LoginScreen = () => {
+export const LoginScreen = ({
+  onError,
+}: {
+  onError: (error: Error) => void;
+}) => {
   const { login, user } = useAuth();
-  const handleSubmit = (values: { username: string; password: string }) => {
-    login(values);
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true }); // 不使用这里的error原因是  setError 是异步操作 不能实时获取最新值  不要和同步代码混一起
+
+  const handleSubmit = async (values: {
+    username: string;
+    password: string;
+  }) => {
+    try {
+      await run(login(values));
+      // await login(values);
+    } catch (e: any) {
+      onError(e);
+    }
   };
 
   return (
@@ -23,7 +38,7 @@ export const LoginScreen = () => {
         <Input placeholder="密码" type="password" id={'username'} />
       </Form.Item>
       <Form.Item>
-        <LongButton type="primary" htmlType={'submit'}>
+        <LongButton type="primary" htmlType={'submit'} loading={isLoading}>
           登录
         </LongButton>
       </Form.Item>
