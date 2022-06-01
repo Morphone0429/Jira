@@ -84,7 +84,7 @@ export const useArray = <T>(initialArray: T[]) => {
 // };
 
 export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
-  const oldTitle = useRef(document.title).current;
+  const oldTitle = useRef(document.title).current; // 返回的 ref 对象在组件的整个生命周期内持续存在。
   // 页面加载时  旧title react app
   // 加载后 新title
   useEffect(() => {
