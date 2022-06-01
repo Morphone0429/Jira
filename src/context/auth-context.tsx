@@ -3,6 +3,8 @@ import * as auth from 'auth-provider';
 import { User } from 'screens/project-list/search-panel';
 import { http } from 'utils/http';
 import { useMount } from 'utils';
+import { useAsync } from 'utils/use-async';
+import { FullPageErrorFallback, FullPageLoading } from 'components/lib';
 interface AuthForm {
   username: string;
   password: string;
@@ -30,17 +32,43 @@ const AuthContext = React.createContext<
 AuthContext.displayName = 'AuthContext';
 
 const AuthProVider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
+  const {
+    data: user,
+    error,
+    isLoading,
+    isIdle,
+    isError,
+    run,
+    setData: setUser,
+  } = useAsync<User | null>();
+
   const login = (form: AuthForm) => auth.login(form).then(setUser); // point free  消参  setUser ===  user => setUser(user)
-  const register = (form: AuthForm) => auth.register(form).then(user => setUser(user));
+  const register = (form: AuthForm) =>
+    auth.register(form).then((user) => setUser(user));
   const logout = () => auth.logout().then(() => setUser(null));
 
   useMount(() => {
     // 当页面加载是 ,调用bootstapUser
-    bootstapUser().then(setUser);
+    // bootstapUser().then(setUser);
+    run(bootstapUser());
   });
-
-  return <AuthContext.Provider children={children} value={{ user, login, register, logout }}></AuthContext.Provider>;
+  // 加载或初始时 返回
+  if (isLoading || isIdle) {
+    return <FullPageLoading></FullPageLoading>;
+  }
+  // 返回失败
+  if (isError) {
+    return (
+      <FullPageErrorFallback error={error as Error}></FullPageErrorFallback>
+    );
+  }
+  return (
+    <AuthContext.Provider
+      children={children}
+      value={{ user, login, register, logout }}
+    ></AuthContext.Provider>
+  );
 };
 
 const useAuth = () => {
