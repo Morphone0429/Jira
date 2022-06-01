@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // 判断值是否为0
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
-export const isVoid = (value: unknown) => value === undefined || value === null || value === '';
+export const isVoid = (value: unknown) =>
+  value === undefined || value === null || value === '';
 
 // object: object  返回的是一个空对象
 // let a: object
@@ -15,7 +16,7 @@ export const isVoid = (value: unknown) => value === undefined || value === null 
 export const cleanObject = (object: { [key: string]: unknown }) => {
   // Object.assign({},object) 1
   const result = { ...object };
-  Object.keys(result).forEach(key => {
+  Object.keys(result).forEach((key) => {
     const value = object[key];
     if (isVoid(value)) {
       delete result[key];
@@ -62,4 +63,40 @@ export const useArray = <T>(initialArray: T[]) => {
       setValue([...value, item]);
     },
   };
+};
+
+// export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
+//   const oldTitle = document.title;
+//   // 页面加载时  旧title react app
+//   // 加载后 新title
+//   useEffect(() => {
+//     document.title = title;
+//   }, [title]);
+
+//   useEffect(() => {
+//     return () => {
+//       if (!keepOnUnmount) {
+//         // 如果不指定依赖，读到就是第一次渲染是的 旧title  即 react app   闭包原理
+//         document.title = oldTitle;
+//       }
+//     };
+//   }, []);
+// };
+
+export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
+  const oldTitle = useRef(document.title).current;
+  // 页面加载时  旧title react app
+  // 加载后 新title
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    return () => {
+      if (!keepOnUnmount) {
+        // 如果不指定依赖，读到就是第一次渲染是的 旧title  即 react app
+        document.title = oldTitle;
+      }
+    };
+  }, [keepOnUnmount, oldTitle]);
 };
