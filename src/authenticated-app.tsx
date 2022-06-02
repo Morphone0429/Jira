@@ -8,6 +8,7 @@ import { ReactComponent as SoftwareLogo } from './assets/software-logo.svg';
 import { Navigate, Route, Routes } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ProjectScreen from 'screens/project';
+import { resetRoute } from 'utils';
 
 // flex grid各自的应用场景
 // 1.一维布局还是二维布局   一维->flex  二维->grid
@@ -27,6 +28,10 @@ export const AuthenticatedApp = () => {
               path={'/projects/:projectId/*'}
               element={<ProjectScreen />}
             ></Route>
+            <Route
+              path="*"
+              element={<Navigate to="/projects" replace={true} />}
+            />
           </Routes>
         </Router>
       </Main>
@@ -53,7 +58,9 @@ const PageHeader = () => {
   return (
     <Header between>
       <HeaderLeft>
-        <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'} />
+        <Button type="link" onClick={resetRoute}>
+          <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'} />
+        </Button>
         <h3>Logo</h3>
         <h3>Logo</h3>
       </HeaderLeft>
