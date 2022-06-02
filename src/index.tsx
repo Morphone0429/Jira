@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { loadServer, DevTools } from 'jira-dev-tool';
 import 'antd/dist/antd.less'; // 用于修改主题样式
 import { AppProviders } from 'context';
+
 loadServer(() =>
   ReactDOM.render(
     <React.StrictMode>
