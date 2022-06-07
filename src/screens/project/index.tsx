@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { Routes, Route, Navigate } from 'react-router';
 import KanbanScreen from 'screens/Kanban';
 import EpicScreen from 'screens/Epic';
+import { useUrlQueryParam } from 'utils/url';
 
 interface IProps {}
 const ProjectScreen: React.FC<IProps> = (props) => {
   //const {  } = props;
+
   return (
     <div>
       <p>ProjectScreen</p>
@@ -16,15 +18,7 @@ const ProjectScreen: React.FC<IProps> = (props) => {
       <Routes>
         <Route path={'/kanban'} element={<KanbanScreen></KanbanScreen>}></Route>
         <Route path={'/epic'} element={<EpicScreen></EpicScreen>}></Route>
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to={window.location.pathname + '/kanban'}
-              replace={true}
-            />
-          }
-        />
+        <Route path="*" element={<Navigate to={window.location.pathname + '/kanban'} replace={true} />} />
       </Routes>
     </div>
   );
