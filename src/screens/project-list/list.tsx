@@ -7,9 +7,9 @@ interface ListProps extends TableProps<Project> {
   users: User[];
 }
 export interface Project {
-  id: string;
+  id: number;
   name: string;
-  personId: string;
+  personId: number;
   pin: boolean;
   organization: string;
   created: number;
@@ -36,10 +36,7 @@ export const List = ({ users, ...props }: ListProps) => {
           title: '负责人',
           render(value, project) {
             return (
-              <span>
-                {users.find((user) => user.id === project.personId)?.name ||
-                  '未知'}
-              </span>
+              <span>{users.find((user) => user.id === project.personId)?.name || '未知'}</span>
             );
           },
         },
@@ -48,9 +45,7 @@ export const List = ({ users, ...props }: ListProps) => {
           render(value, project) {
             return (
               <span>
-                {project.created
-                  ? dayjs(project.created).format('YYYY-MM-DD')
-                  : '无'}
+                {project.created ? dayjs(project.created).format('YYYY-MM-DD') : '无'}
               </span>
             );
           },

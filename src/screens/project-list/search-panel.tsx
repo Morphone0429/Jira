@@ -2,9 +2,10 @@
 import { jsx, css } from '@emotion/react';
 import { useState, useEffect } from 'react';
 import { Form, Input, Select } from 'antd';
+import { Project } from './list';
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   title: string;
@@ -14,10 +15,11 @@ export interface User {
 
 interface SearchPanelProps {
   users: User[];
-  param: {
-    name: string;
-    personId: string;
-  };
+  // param: {
+  //   name: string;
+  //   personId: string;
+  // };
+  param: Partial<Pick<Project, 'name' | 'personId'>>;
   setParam: (param: SearchPanelProps['param']) => void;
 }
 

@@ -23,7 +23,7 @@ interface IProps extends Omit<SelectProps, 'value' | 'onChange' | 'options'> {
  * 当 isNaN (Number(valve)）为true的时候,代表选择默认类型
  * 当选择默认类型的时候,onChange会回调undefined
  *
- * 透传 rest props   1. & SelectProps  2. ts React.ComponentProps<typeof Select>获取组件Select类型
+ * 透传 rest props   1.props & SelectProps  2. ts React.ComponentProps<typeof Select>获取组件Select类型
  * */
 const IdSelect: React.FC<IProps> = (props) => {
   const { value, onChange, defaultOptionName, options, ...restProps } = props;

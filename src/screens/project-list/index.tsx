@@ -8,15 +8,17 @@ import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 import { useUrlQueryParam } from 'utils/url';
 import { stringify } from 'querystring';
+import { useProjectsSearchParams } from './util';
 
 const apiUrl = process.env.REACT_APP_API_URL; // 通过打包命令会读取不同的接口变量 .env
 
 export const ProjectListScreen = () => {
   useDocumentTitle('列表', false);
-  const [param, setParam] = useUrlQueryParam(['name', 'personId']); // 返回的值类型检测  泛型  通过传入的值动态判定
-  console.log('console::::::=========>', param);
-  const debounceParam = useDebounce(param, 2000); // param每次都会创建新的对象 导致debounceParam 里依赖的value不同而变化
+  // const [param, setParam] = useUrlQueryParam(['name', 'personId']); // 返回的值类型检测  泛型  通过传入的值动态判定
+  // const projectsParam = { ...param, personId: Number(param.personId) || undefined };
+  const [param, setParam] = useProjectsSearchParams();
 
+  const debounceParam = useDebounce(param, 2000); // param每次都会创建新的对象 导致debounceParam 里依赖的value不同而变化
   const { isLoading, error, data: list } = useProjects(debounceParam);
   const { data: users } = useUsers(); //封装了两层  useAsync 和 useUsers
   return (
