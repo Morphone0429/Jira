@@ -7,6 +7,7 @@ import { useEditProject } from 'utils/project';
 interface ListProps extends TableProps<Project> {
   // list: Project[];
   users: User[];
+  refresh?: () => void;
 }
 export interface Project {
   id: number;
@@ -22,7 +23,7 @@ export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject();
   // const pinProject = (id: number, pin: boolean) => mutate({ id, pin });
   // 函数柯里化
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin }).then(props.refresh);
 
   return (
     <Table
