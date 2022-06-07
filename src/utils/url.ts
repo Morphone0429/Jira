@@ -1,16 +1,42 @@
+import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 // 返回页面url中 指定key的参数值
-export const useUrlQueryParam = (keys: string[]) => {
-  const [searchParams] = useSearchParams();
+// 返回的值类型检测  泛型  通过传入的值动态判定
+
+export const useUrlQueryParam = <K extends string>(keys: K[]) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   // console.log('console::::::=========>', searchParams.get('name'));
   return [
-    keys.reduce((prev: { [p: string]: string }, key) => {
-      return { ...prev, [key]: searchParams.get(key) || '' };
-    }, {} as { [key in string]: string }),
-    searchParams,
+    useMemo(
+      () =>
+        keys.reduce((prev, key) => {
+          return { ...prev, [key]: searchParams.get(key) || '' };
+        }, {} as { [key in K]: string }),
+      [searchParams]
+    ),
+    setSearchParams,
   ] as const;
 };
+
+// 当obj 是 setState 返回时，不会引起无线循环   所以keys 不能作为依赖
+
+// export const useUrlQueryParam = <K extends string>(keys: K[]) => {
+//   const [searchParams, setSearchParams] = useSearchParams();
+//   // console.log('console::::::=========>', searchParams.get('name'));
+//   return [
+//     keys.reduce((prev, key) => {
+//       return { ...prev, [key]: searchParams.get(key) || '' };
+//     }, {} as { [key in K]: string }),
+//     setSearchParams,
+//   ] as const;
+// };
+/** 
+ * keys.reduce((prev, key) => {
+      return { ...prev, [key]: searchParams.get(key) || '' };
+    }, {} as { [key in K]: string }), 每次都返回新的对象  导致无线循环
+ * 
+ * */
 
 // // const useUrlQueryParam: (keys: string[]) => {}[] 解决类型返回问题  as const
 // // as const
