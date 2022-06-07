@@ -3,7 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 // 判断值是否为0
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
-export const isVoid = (value: unknown) => value === undefined || value === null || value === '';
+export const isVoid = (value: unknown) =>
+  value === undefined || value === null || value === '';
 
 // object: object  返回的是一个空对象
 // let a: object
@@ -101,3 +102,28 @@ export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
 };
 
 export const resetRoute = () => (window.location.href = window.location.origin);
+
+/**
+ * 传入一个对象，和键集合，返回对应的对象中的键值对
+ * @param obj
+ * @param keys
+ */
+export const subset = <O extends { [key in string]: unknown }, K extends keyof O>(
+  obj: O,
+  keys: K[]
+) => {
+  const filteredEntries = Object.entries(obj).filter(([key]) => keys.includes(key as K));
+  return Object.fromEntries(filteredEntries) as Pick<O, K>;
+};
+// 返回组件的挂载状态，如果还没挂载或者已经卸载，返回false；反之，返回true
+export const useMountedRef = () => {
+  const mountedRef = useRef(false);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  return mountedRef;
+};

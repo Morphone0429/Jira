@@ -1,6 +1,7 @@
 import qs from 'qs';
 import * as auth from 'auth-provider';
 import { useAuth } from 'context/auth-context';
+import { useCallback } from 'react';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 interface Config extends RequestInit {
@@ -8,7 +9,10 @@ interface Config extends RequestInit {
   data?: object;
 }
 
-const http = async (endpoint: string, { data, token, headers, ...customConfig }: Config = {}) => {
+const http = async (
+  endpoint: string,
+  { data, token, headers, ...customConfig }: Config = {}
+) => {
   const config = {
     method: 'GET',
     headers: {
@@ -24,7 +28,7 @@ const http = async (endpoint: string, { data, token, headers, ...customConfig }:
     config.body = JSON.stringify(data || {});
   }
 
-  return window.fetch(`${apiUrl}/${endpoint}`, config).then(async response => {
+  return window.fetch(`${apiUrl}/${endpoint}`, config).then(async (response) => {
     if (response.status === 401) {
       await auth.logout();
       window.location.reload();
@@ -42,7 +46,11 @@ const http = async (endpoint: string, { data, token, headers, ...customConfig }:
 const useHttp = () => {
   const { user } = useAuth();
   // [endpoint, config]  turple   ...[endpoint, config]解构
-  return (...[endpoint, config]: Parameters<typeof http>) => http(endpoint, { ...config, token: user?.token });
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) =>
+      http(endpoint, { ...config, token: user?.token }),
+    [user?.token]
+  );
   // return ([endpoint, config]: [string, Config]) => http(endpoint, { ...config, token: user?.token });
 };
 
