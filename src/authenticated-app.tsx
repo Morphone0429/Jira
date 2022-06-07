@@ -2,13 +2,15 @@ import styled from '@emotion/styled';
 import { Button, Dropdown, Menu } from 'antd';
 import { Row } from 'components/lib';
 import { useAuth } from 'context/auth-context';
-import { userInfo } from 'os';
 import { ProjectListScreen } from 'screens/project-list';
 import { ReactComponent as SoftwareLogo } from './assets/software-logo.svg';
 import { Navigate, Route, Routes } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ProjectScreen from 'screens/project';
 import { resetRoute } from 'utils';
+import { useState } from 'react';
+import ProjectModal from 'screens/project-list/project-modal';
+import ProjectPopover from 'components/project-popover';
 
 // flex grid各自的应用场景
 // 1.一维布局还是二维布局   一维->flex  二维->grid
@@ -17,6 +19,8 @@ import { resetRoute } from 'utils';
 // 布局  先规划网格  数量固定   grid
 
 export const AuthenticatedApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+
   return (
     <Container>
       <PageHeader />
@@ -24,17 +28,16 @@ export const AuthenticatedApp = () => {
         <Router>
           <Routes>
             <Route path={'/projects'} element={<ProjectListScreen />}></Route>
-            <Route
-              path={'/projects/:projectId/*'}
-              element={<ProjectScreen />}
-            ></Route>
-            <Route
-              path="*"
-              element={<Navigate to="/projects" replace={true} />}
-            />
+            <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
+            <Route path="*" element={<Navigate to="/projects" replace={true} />} />
           </Routes>
         </Router>
       </Main>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      />
+      <Button onClick={() => setProjectModalOpen(true)}>打开</Button>
     </Container>
   );
 };
@@ -58,10 +61,10 @@ const PageHeader = () => {
   return (
     <Header between>
       <HeaderLeft>
-        <Button type="link" onClick={resetRoute}>
+        <Button type="link" onClick={resetRoute} style={{ padding: 0 }}>
           <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'} />
         </Button>
-        <h3>Logo</h3>
+        <ProjectPopover></ProjectPopover>
         <h3>Logo</h3>
       </HeaderLeft>
       <HeaderRight>
@@ -72,7 +75,7 @@ const PageHeader = () => {
     </Header>
   );
 };
-
+// const f = () => d   const d = 1   虽然f声明了d 但是并没有运行f 所以不会报错
 const Container = styled.div`
   display: grid;
   grid-template-rows: 6rem 1fr;
