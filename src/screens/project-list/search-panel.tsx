@@ -23,13 +23,13 @@ interface SearchPanelProps {
 
 export const SearchPanel = ({ param, setParam, users }: SearchPanelProps) => {
   return (
-    <Form css={{ marginBottom: '2rem', '> *': '' }} layout='inline'>
+    <Form css={{ marginBottom: '2rem', '> *': '' }} layout="inline">
       <Form.Item>
         <Input
-          placeholder='项目名'
-          type='text'
+          placeholder="项目名"
+          type="text"
           value={param.name}
-          onChange={e =>
+          onChange={(e) =>
             setParam({
               ...param,
               name: e.target.value,
@@ -41,7 +41,7 @@ export const SearchPanel = ({ param, setParam, users }: SearchPanelProps) => {
       <Form.Item>
         <Select
           value={param.personId}
-          onChange={value =>
+          onChange={(value) =>
             setParam({
               ...param,
               personId: value,
@@ -49,8 +49,8 @@ export const SearchPanel = ({ param, setParam, users }: SearchPanelProps) => {
           }
         >
           <Select.Option value={''}>负责人</Select.Option>
-          {users.map(user => (
-            <Select.Option value={user.id} key={user.id}>
+          {users.map((user) => (
+            <Select.Option value={user.id + ''} key={user.id}>
               {user.name}
             </Select.Option>
           ))}

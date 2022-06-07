@@ -13,12 +13,7 @@ const apiUrl = process.env.REACT_APP_API_URL; // 通过打包命令会读取不�
 
 export const ProjectListScreen = () => {
   useDocumentTitle('列表', false);
-  const [, setParam] = useState({
-    name: '',
-    personId: '',
-  });
-
-  const [param] = useUrlQueryParam(['name', 'personId']); // 返回的值类型检测  泛型  通过传入的值动态判定
+  const [param, setParam] = useUrlQueryParam(['name', 'personId']); // 返回的值类型检测  泛型  通过传入的值动态判定
   console.log('console::::::=========>', param);
   const debounceParam = useDebounce(param, 2000); // param每次都会创建新的对象 导致debounceParam 里依赖的value不同而变化
 
@@ -34,7 +29,7 @@ export const ProjectListScreen = () => {
   );
 };
 
-ProjectListScreen.whyDidYouRender = true;
+ProjectListScreen.whyDidYouRender = false;
 
 const Container = styled.div`
   padding: 3.2rem;

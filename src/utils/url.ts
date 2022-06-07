@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
+import { cleanObject } from 'utils';
 
 // 返回页面url中 指定key的参数值
 // 返回的值类型检测  泛型  通过传入的值动态判定
@@ -15,7 +16,11 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
         }, {} as { [key in K]: string }),
       [searchParams]
     ),
-    setSearchParams,
+    // setSearchParams,
+    (params: Partial<{ [key in K]: unknown }>) => {
+      const o = cleanObject({ ...Object.fromEntries(searchParams), ...params }) as URLSearchParamsInit;
+      return setSearchParams(o);
+    },
   ] as const;
 };
 
@@ -45,3 +50,5 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
 
 // const b = ['12']  //const b: string[]
 // const b1 = ['12'] as const  // const b1: readonly ["12"]
+
+// Object.fromEntries   iterator [] ,{} 可以用for of 遍历
