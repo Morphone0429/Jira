@@ -9,7 +9,8 @@ interface ListProps extends TableProps<Project> {
   // list: Project[];
   users: User[];
   refresh?: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
+  // setProjectModalOpen: (isOpen: boolean) => void;
+  projectButton: JSX.Element;
 }
 export interface Project {
   id: number;
@@ -31,11 +32,10 @@ export const List = ({ users, ...props }: ListProps) => {
       items={[
         {
           key: 'edit',
-          label: (
-            <ButtonNoPadding type="link" onClick={() => props.setProjectModalOpen(true)}>
-              编辑
-            </ButtonNoPadding>
-          ),
+          label: props.projectButton,
+          // <ButtonNoPadding type="link" onClick={() => props.setProjectModalOpen(true)}>
+          //   编辑
+          // </ButtonNoPadding>
         },
       ]}
     />

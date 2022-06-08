@@ -12,7 +12,8 @@ import { Row } from 'components/lib';
 const apiUrl = process.env.REACT_APP_API_URL; // 通过打包命令会读取不同的接口变量 .env
 
 export const ProjectListScreen = (props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
+  // setProjectModalOpen: (isOpen: boolean) => void;
+  projectButton: JSX.Element;
 }) => {
   useDocumentTitle('列表', false);
   // const [param, setParam] = useUrlQueryParam(['name', 'personId']); // 返回的值类型检测  泛型  通过传入的值动态判定
@@ -26,7 +27,7 @@ export const ProjectListScreen = (props: {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <Button onClick={() => props.setProjectModalOpen(true)}>创建项目</Button>
+        {props.projectButton}
       </Row>
       <SearchPanel param={param} setParam={setParam} users={users || []} />
       {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null}
@@ -35,7 +36,7 @@ export const ProjectListScreen = (props: {
         dataSource={list || []}
         users={users || []}
         loading={isLoading}
-        setProjectModalOpen={props.setProjectModalOpen}
+        projectButton={props.projectButton}
       />
     </Container>
   );

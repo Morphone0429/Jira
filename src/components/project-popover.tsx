@@ -4,10 +4,11 @@ import React from 'react';
 import { useProjects } from 'utils/project';
 import { ButtonNoPadding } from './lib';
 interface IProps {
-  setProjectModalOpen: (isOpen: boolean) => void;
+  // setProjectModalOpen: (isOpen: boolean) => void;
+  projectButton: JSX.Element;
 }
 const ProjectPopoverr: React.FC<IProps> = (props) => {
-  const { setProjectModalOpen } = props;
+  const { projectButton } = props;
   const { data: projects, isLoading } = useProjects();
 
   const pinnedProjects = projects?.filter((project) => project.pin);
@@ -22,9 +23,7 @@ const ProjectPopoverr: React.FC<IProps> = (props) => {
         ))}
       </List>
       <Divider />
-      <ButtonNoPadding type="link" onClick={() => setProjectModalOpen(true)}>
-        创建项目
-      </ButtonNoPadding>
+      {projectButton}
     </ContentContainer>
   );
   return (
