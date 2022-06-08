@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Spin, Typography } from 'antd';
+import { Button, Spin, Typography } from 'antd';
 import { DevTools } from 'jira-dev-tool';
 
 // 布局组件
@@ -17,11 +17,7 @@ export const Row = styled.div<{
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     margin-right: ${(props) =>
-      typeof props.gap === 'number'
-        ? props.gap + 'rem'
-        : props.gap
-        ? '2rem'
-        : undefined};
+      typeof props.gap === 'number' ? props.gap + 'rem' : props.gap ? '2rem' : undefined};
   }
 `;
 
@@ -47,3 +43,8 @@ export const FullPageErrorFallback = ({ error }: { error: Error | null }) => (
     <Typography.Text type="danger">{error?.message}</Typography.Text>
   </FullPage>
 );
+
+// no padding button
+export const ButtonNoPadding = styled(Button)`
+  padding: 0;
+`;
