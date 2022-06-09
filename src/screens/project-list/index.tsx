@@ -7,19 +7,18 @@ import { Button, Typography } from 'antd';
 import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 import { useProjectsSearchParams } from './util';
-import { Row } from 'components/lib';
+import { ButtonNoPadding, Row } from 'components/lib';
+import { useDispatch } from 'react-redux';
+import { projectListActions } from './project-list.slice';
 
 const apiUrl = process.env.REACT_APP_API_URL; // 通过打包命令会读取不同的接口变量 .env
 
-export const ProjectListScreen = (props: {
-  // setProjectModalOpen: (isOpen: boolean) => void;
-  projectButton: JSX.Element;
-}) => {
+export const ProjectListScreen = () => {
   useDocumentTitle('列表', false);
   // const [param, setParam] = useUrlQueryParam(['name', 'personId']); // 返回的值类型检测  泛型  通过传入的值动态判定
   // const projectsParam = { ...param, personId: Number(param.personId) || undefined };
   const [param, setParam] = useProjectsSearchParams();
-
+  const dispatch = useDispatch();
   const debounceParam = useDebounce(param, 2000); // param每次都会创建新的对象 导致debounceParam 里依赖的value不同而变化
   const { isLoading, error, data: list, retry } = useProjects(debounceParam);
   const { data: users } = useUsers(); //封装了两层  useAsync 和 useUsers
@@ -27,17 +26,16 @@ export const ProjectListScreen = (props: {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        {props.projectButton}
+        <ButtonNoPadding
+          type="link"
+          onClick={() => dispatch(projectListActions.openProjectModal())}
+        >
+          创建项目
+        </ButtonNoPadding>
       </Row>
       <SearchPanel param={param} setParam={setParam} users={users || []} />
       {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null}
-      <List
-        refresh={retry}
-        dataSource={list || []}
-        users={users || []}
-        loading={isLoading}
-        projectButton={props.projectButton}
-      />
+      <List refresh={retry} dataSource={list || []} users={users || []} loading={isLoading} />
     </Container>
   );
 };

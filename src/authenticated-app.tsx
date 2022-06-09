@@ -19,46 +19,26 @@ import ProjectPopover from 'components/project-popover';
 // 布局  先规划网格  数量固定   grid
 
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  // const [projectModalOpen, setProjectModalOpen] = useState(false);
 
   return (
     <Container>
-      <PageHeader
-        projectButton={
-          <ButtonNoPadding type="link" onClick={() => setProjectModalOpen(true)}>
-            创建项目
-          </ButtonNoPadding>
-        }
-      />
+      <PageHeader />
       <Main>
         <Router>
           <Routes>
-            <Route
-              path={'/projects'}
-              element={
-                <ProjectListScreen
-                  projectButton={
-                    <ButtonNoPadding type="link" onClick={() => setProjectModalOpen(true)}>
-                      创建项目
-                    </ButtonNoPadding>
-                  }
-                />
-              }
-            ></Route>
+            <Route path={'/projects'} element={<ProjectListScreen />}></Route>
             <Route path={'/projects/:projectId/*'} element={<ProjectScreen />}></Route>
             <Route path="*" element={<Navigate to="/projects" replace={true} />} />
           </Routes>
         </Router>
       </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      />
+      <ProjectModal />
     </Container>
   );
 };
 
-const PageHeader = (props: { projectButton: JSX.Element }) => {
+const PageHeader = () => {
   const { logout, user } = useAuth();
   const menu = (
     <Menu
@@ -80,7 +60,7 @@ const PageHeader = (props: { projectButton: JSX.Element }) => {
         <ButtonNoPadding type="link" onClick={resetRoute}>
           <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'} />
         </ButtonNoPadding>
-        <ProjectPopover projectButton={props.projectButton}></ProjectPopover>
+        <ProjectPopover></ProjectPopover>
         <h3>Logo</h3>
       </HeaderLeft>
       <HeaderRight>
