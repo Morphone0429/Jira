@@ -11,3 +11,18 @@ export const useProjectsSearchParams = () => {
     setParam,
   ] as const;
 };
+
+//返回turble  使用as const  使用的时候可以随意命名
+// 一般三个以上元素返回用对象  三个以下用 turble
+export const useProjectModal = () => {
+  const [{ projectCreate }, setProjectCreate] = useUrlQueryParam(['projectCreate']);
+  const open = () => setProjectCreate({ projectCreate: true });
+  const close = () => setProjectCreate({ projectCreate: undefined });
+
+  // return [projectCreate === 'true', open, close] as const;
+  return {
+    projectModalOpen: projectCreate === 'true',
+    open,
+    close,
+  };
+};

@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom';
 import Pin from 'components/pin';
 import { useEditProject } from 'utils/project';
 import { ButtonNoPadding } from 'components/lib';
+import { useProjectModal } from './util';
 interface ListProps extends TableProps<Project> {
   // list: Project[];
   users: User[];
   refresh?: () => void;
   // setProjectModalOpen: (isOpen: boolean) => void;
-  projectButton: JSX.Element;
+  // projectButton: JSX.Element;
 }
 export interface Project {
   id: number;
@@ -24,6 +25,7 @@ export interface Project {
 
 export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject();
+  const { open } = useProjectModal();
   // const pinProject = (id: number, pin: boolean) => mutate({ id, pin });
   // 函数柯里化
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin }).then(props.refresh);
@@ -32,10 +34,11 @@ export const List = ({ users, ...props }: ListProps) => {
       items={[
         {
           key: 'edit',
-          label: props.projectButton,
-          // <ButtonNoPadding type="link" onClick={() => props.setProjectModalOpen(true)}>
-          //   编辑
-          // </ButtonNoPadding>
+          label: (
+            <ButtonNoPadding type="link" onClick={open}>
+              编辑
+            </ButtonNoPadding>
+          ),
         },
       ]}
     />
