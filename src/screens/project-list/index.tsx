@@ -7,21 +7,16 @@ import { Button, Typography } from 'antd';
 import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 import { useProjectModal, useProjectsSearchParams } from './util';
-import { ButtonNoPadding, Row } from 'components/lib';
+import { ButtonNoPadding, ErrorBox, Row } from 'components/lib';
 
 const apiUrl = process.env.REACT_APP_API_URL; // 通过打包命令会读取不同的接口变量 .env
 
-export const ProjectListScreen = (props: {
-  // setProjectModalOpen: (isOpen: boolean) => void;
-  // projectButton: JSX.Element;
-}) => {
+export const ProjectListScreen = (props: {}) => {
   useDocumentTitle('列表', false);
-  // const [param, setParam] = useUrlQueryParam(['name', 'personId']); // 返回的值类型检测  泛型  通过传入的值动态判定
-  // const projectsParam = { ...param, personId: Number(param.personId) || undefined };
   const [param, setParam] = useProjectsSearchParams();
   const { open } = useProjectModal();
   const debounceParam = useDebounce(param, 2000); // param每次都会创建新的对象 导致debounceParam 里依赖的value不同而变化
-  const { isLoading, error, data: list, retry } = useProjects(debounceParam);
+  const { isLoading, error, data: list } = useProjects(debounceParam);
   const { data: users } = useUsers(); //封装了两层  useAsync 和 useUsers
   return (
     <Container>
@@ -32,9 +27,9 @@ export const ProjectListScreen = (props: {
         </ButtonNoPadding>
       </Row>
       <SearchPanel param={param} setParam={setParam} users={users || []} />
-      {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null}
+      <ErrorBox error={error}></ErrorBox>
+      {/* {error ? <Typography.Text type="danger">{error.message}</Typography.Text> : null} */}
       <List
-        refresh={retry}
         dataSource={list || []}
         users={users || []}
         loading={isLoading}

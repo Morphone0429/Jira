@@ -9,7 +9,7 @@ import { useProjectModal } from './util';
 interface ListProps extends TableProps<Project> {
   // list: Project[];
   users: User[];
-  refresh?: () => void;
+  // refresh?: () => void;
   // setProjectModalOpen: (isOpen: boolean) => void;
   // projectButton: JSX.Element;
 }
@@ -28,7 +28,7 @@ export const List = ({ users, ...props }: ListProps) => {
   const { open } = useProjectModal();
   // const pinProject = (id: number, pin: boolean) => mutate({ id, pin });
   // 函数柯里化
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin }).then(props.refresh);
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
   const menu = (
     <Menu
       items={[
