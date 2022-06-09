@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useProject } from 'utils/project';
 import { useUrlQueryParam } from 'utils/url';
 
 // 项目列表搜索参数
@@ -15,14 +16,26 @@ export const useProjectsSearchParams = () => {
 //返回turble  使用as const  使用的时候可以随意命名
 // 一般三个以上元素返回用对象  三个以下用 turble
 export const useProjectModal = () => {
-  const [{ projectCreate }, setProjectCreate] = useUrlQueryParam(['projectCreate']);
+  const [{ projectCreate }, setProjectCreate] = useUrlQueryParam(['projectCreate']); // 判断是否创建
+  const [{ editingProjectId }, setEditingProjectId] = useUrlQueryParam(['editingProjectId']); // 判断是否编辑
+
+  const { data: editingProject, isLoading } = useProject(Number(editingProjectId));
+
   const open = () => setProjectCreate({ projectCreate: true });
-  const close = () => setProjectCreate({ projectCreate: undefined });
+  const close = () => {
+    setProjectCreate({ projectCreate: undefined });
+    setEditingProjectId({ editingProjectId: undefined });
+  };
+
+  const startEdit = (id: number) => setEditingProjectId({ editingProjectId: id });
 
   // return [projectCreate === 'true', open, close] as const;
   return {
-    projectModalOpen: projectCreate === 'true',
+    projectModalOpen: projectCreate === 'true' || Boolean(editingProject),
     open,
     close,
+    startEdit,
+    editingProject,
+    isLoading,
   };
 };

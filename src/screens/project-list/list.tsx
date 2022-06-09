@@ -40,6 +40,14 @@ export const List = ({ users, ...props }: ListProps) => {
             </ButtonNoPadding>
           ),
         },
+        {
+          key: 'delete',
+          label: (
+            <ButtonNoPadding type="link" onClick={open}>
+              删除
+            </ButtonNoPadding>
+          ),
+        },
       ]}
     />
   );

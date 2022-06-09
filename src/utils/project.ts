@@ -89,3 +89,10 @@ export const useAddProject = () => {
     }
   );
 };
+
+export const useProject = (id?: number) => {
+  const client = useHttp();
+  return useQuery<Project>(['project', { id }], () => client(`projects/${id}`), {
+    enabled: !!id, // id 没有值时 不请求
+  });
+};
