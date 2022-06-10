@@ -10,8 +10,8 @@ import { Select } from 'antd';
 
 type SelectProps = React.ComponentProps<typeof Select>;
 interface IProps extends Omit<SelectProps, 'value' | 'onChange' | 'options'> {
-  value: Raw | null | undefined;
-  onChange: (value?: number) => void; // 传出去的值类型为number  保证行为一致
+  value?: Raw | null | undefined;
+  onChange?: (value?: number) => void; // 传出去的值类型为number  保证行为一致
   defaultOptionName?: string;
   options?: { name: string; id: number }[];
 }
@@ -30,7 +30,7 @@ const IdSelect: React.FC<IProps> = (props) => {
   return (
     <Select
       value={options?.length ? toNumber(value) : 0}
-      onChange={(value) => onChange(toNumber(value) || undefined)}
+      onChange={(value) => onChange?.(toNumber(value) || undefined)}
       {...restProps}
     >
       {defaultOptionName ? <Select.Option value={0}>{defaultOptionName}</Select.Option> : null}

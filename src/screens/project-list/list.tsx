@@ -6,6 +6,7 @@ import Pin from 'components/pin';
 import { useEditProject } from 'utils/project';
 import { ButtonNoPadding } from 'components/lib';
 import { useProjectModal } from './util';
+import { useState } from 'react';
 interface ListProps extends TableProps<Project> {
   // list: Project[];
   users: User[];
@@ -25,28 +26,28 @@ export interface Project {
 
 export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject();
-  const { open } = useProjectModal();
+  const { startEdit } = useProjectModal();
+
+  const [projectId, setPojectId] = useState<number>();
   // const pinProject = (id: number, pin: boolean) => mutate({ id, pin });
   // 函数柯里化
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const editProject = (id: number) => () => startEdit(id);
+
   const menu = (
     <Menu
       items={[
         {
           key: 'edit',
           label: (
-            <ButtonNoPadding type="link" onClick={open}>
+            <ButtonNoPadding type="link" onClick={editProject(projectId as number)}>
               编辑
             </ButtonNoPadding>
           ),
         },
         {
           key: 'delete',
-          label: (
-            <ButtonNoPadding type="link" onClick={open}>
-              删除
-            </ButtonNoPadding>
-          ),
+          label: <ButtonNoPadding type="link">删除</ButtonNoPadding>,
         },
       ]}
     />
@@ -103,7 +104,9 @@ export const List = ({ users, ...props }: ListProps) => {
           render(value, project) {
             return (
               <Dropdown overlay={menu}>
-                <ButtonNoPadding type={'link'}>...</ButtonNoPadding>
+                <ButtonNoPadding type={'link'} onClick={() => setPojectId(project.id)}>
+                  ...
+                </ButtonNoPadding>
               </Dropdown>
             );
           },
