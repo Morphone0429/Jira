@@ -22,13 +22,18 @@ const ProjectModal: React.FC<IProps> = (props) => {
     });
   };
 
+  const closeModal = () => {
+    form.resetFields();
+    close();
+  };
+
   useEffect(() => {
     form.setFieldsValue(editingProject); // 重置表单
   }, [editingProject, form]);
 
   const title = editingProject ? '编辑项目' : '创建项目';
   return (
-    <Drawer visible={projectModalOpen} width={'100%'} onClose={close} forceRender={true}>
+    <Drawer visible={projectModalOpen} width={'100%'} onClose={closeModal} forceRender={true}>
       <Container>
         {isLoading ? (
           <Spin size="large"></Spin>

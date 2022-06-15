@@ -5,6 +5,7 @@ import { http } from 'utils/http';
 import { useMount } from 'utils';
 import { useAsync } from 'utils/use-async';
 import { FullPageErrorFallback, FullPageLoading } from 'components/lib';
+import { useQueryClient } from 'react-query';
 interface AuthForm {
   username: string;
   password: string;
@@ -33,20 +34,17 @@ AuthContext.displayName = 'AuthContext';
 
 const AuthProVider = ({ children }: { children: ReactNode }) => {
   // const [user, setUser] = useState<User | null>(null);
-  const {
-    data: user,
-    error,
-    isLoading,
-    isIdle,
-    isError,
-    run,
-    setData: setUser,
-  } = useAsync<User | null>();
+  const { data: user, error, isLoading, isIdle, isError, run, setData: setUser } = useAsync<User | null>();
+
+  const queryClient = useQueryClient();
 
   const login = (form: AuthForm) => auth.login(form).then(setUser); // point free  消参  setUser ===  user => setUser(user)
-  const register = (form: AuthForm) =>
-    auth.register(form).then((user) => setUser(user));
-  const logout = () => auth.logout().then(() => setUser(null));
+  const register = (form: AuthForm) => auth.register(form).then((user) => setUser(user));
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      queryClient.clear(); // 清空query缓存数据
+    });
 
   useMount(() => {
     // 当页面加载是 ,调用bootstapUser
@@ -59,16 +57,9 @@ const AuthProVider = ({ children }: { children: ReactNode }) => {
   }
   // 返回失败
   if (isError) {
-    return (
-      <FullPageErrorFallback error={error as Error}></FullPageErrorFallback>
-    );
+    return <FullPageErrorFallback error={error as Error}></FullPageErrorFallback>;
   }
-  return (
-    <AuthContext.Provider
-      children={children}
-      value={{ user, login, register, logout }}
-    ></AuthContext.Provider>
-  );
+  return <AuthContext.Provider children={children} value={{ user, login, register, logout }}></AuthContext.Provider>;
 };
 
 const useAuth = () => {
