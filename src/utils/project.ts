@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Project } from 'screens/project-list/list';
+import { useProjectsSearchParams } from 'screens/project-list/util';
 import { cleanObject } from 'utils';
 import { useHttp } from './http';
 import { useAsync } from './use-async';
@@ -18,6 +19,8 @@ export const useProjects = (param?: Partial<Project>) => {
 export const useEditProject = () => {
   const client = useHttp();
   const queryClient = useQueryClient();
+  const [searchParams] = useProjectsSearchParams();
+  const queryKey = ['projects', searchParams];
   return useMutation(
     (params: Partial<Project>) =>
       client(`projects/${params.id}`, {
@@ -25,7 +28,27 @@ export const useEditProject = () => {
         method: 'PATCH',
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries('projects'), // 'projects' 和 useProjects key 保持一致  使用了缓存  并及时刷新
+      // onSuccess: () => queryClient.invalidateQueries('projects'), // 'projects' 和 useProjects key 保持一致  使用了缓存  并及时刷新
+      onSuccess: () => queryClient.invalidateQueries(queryKey), // 'projects' 和 useProjects key 保持一致  使用了缓存  并及时刷新
+      async onMutate(target) {
+        // 在请求回来之前就进行更新  onMutate只要useMutation一调用 就会执行
+        const previousItems = queryClient.getQueryData(queryKey);
+        queryClient.setQueryData(queryKey, (old?: Project[]) => {
+          return (
+            old?.map((project) =>
+              project.id === target.id ? { ...project, ...target } : project
+            ) || []
+          );
+        });
+        return { previousItems };
+      },
+      onError(error, newItem, context) {
+        // 请求出错时  状态回滚
+        queryClient.setQueryData(
+          queryKey,
+          (context as { previousItems: Project[] }).previousItems
+        );
+      },
     }
   );
 };
