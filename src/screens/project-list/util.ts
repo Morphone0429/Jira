@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useProject } from 'utils/project';
-import { useUrlQueryParam } from 'utils/url';
+import { useSetUrlSearchParam, useUrlQueryParam } from 'utils/url';
 
 // 项目列表搜索参数
 export const useProjectsSearchParams = () => {
@@ -24,7 +24,7 @@ export const useProjectModal = () => {
 
   const open = () => setProjectCreate({ projectCreate: true });
 
-  const [_, setUrlParam] = useSearchParams();
+  const setUrlParam = useSetUrlSearchParam();
   // const close = () => {
   //   setEditingProjectId({ editingProjectId: '' });
   //   setProjectCreate({ projectCreate: '' });
