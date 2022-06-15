@@ -5,14 +5,14 @@ import { ErrorBox } from 'components/lib';
 import UserSelect from 'components/user-select';
 import React, { useEffect } from 'react';
 import { useAddProject, useEditProject } from 'utils/project';
-import { useProjectModal } from './util';
+import { useProjectModal, useProjectsQueryKey } from './util';
 interface IProps {}
 const ProjectModal: React.FC<IProps> = (props) => {
   // const {  } = props;
   const { projectModalOpen, close, editingProject, isLoading } = useProjectModal();
 
   const useMutateProject = editingProject ? useEditProject : useAddProject;
-  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject(); // 异步async
+  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject(useProjectsQueryKey()); // 异步async
   const [form] = useForm();
 
   const onFinish = (values: any) => {
@@ -36,24 +36,11 @@ const ProjectModal: React.FC<IProps> = (props) => {
           <>
             <h1>{title}</h1>
             <ErrorBox error={error} />
-            <Form
-              form={form}
-              layout={'vertical'}
-              style={{ width: '40rem' }}
-              onFinish={onFinish}
-            >
-              <Form.Item
-                label="名称"
-                name={'name'}
-                rules={[{ required: true, message: '请输入项目名' }]}
-              >
+            <Form form={form} layout={'vertical'} style={{ width: '40rem' }} onFinish={onFinish}>
+              <Form.Item label="名称" name={'name'} rules={[{ required: true, message: '请输入项目名' }]}>
                 <Input placeholder="请输入项目名称"></Input>
               </Form.Item>
-              <Form.Item
-                label="部门"
-                name={'organization'}
-                rules={[{ required: true, message: '请输入部门名' }]}
-              >
+              <Form.Item label="部门" name={'organization'} rules={[{ required: true, message: '请输入部门名' }]}>
                 <Input placeholder="请输入部门名称"></Input>
               </Form.Item>
 

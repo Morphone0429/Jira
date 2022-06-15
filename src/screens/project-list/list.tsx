@@ -1,11 +1,11 @@
 import { User } from './search-panel';
-import { Dropdown, Menu, Table, TableProps } from 'antd';
+import { Dropdown, Menu, Modal, Table, TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import Pin from 'components/pin';
-import { useEditProject } from 'utils/project';
+import { useDeleteProject, useEditProject } from 'utils/project';
 import { ButtonNoPadding } from 'components/lib';
-import { useProjectModal } from './util';
+import { useProjectModal, useProjectsQueryKey } from './util';
 import { useState } from 'react';
 interface ListProps extends TableProps<Project> {
   // list: Project[];
@@ -25,14 +25,25 @@ export interface Project {
 // 函数柯里化
 
 export const List = ({ users, ...props }: ListProps) => {
-  const { mutate } = useEditProject();
+  const { mutate } = useEditProject(useProjectsQueryKey());
   const { startEdit } = useProjectModal();
-
+  const { mutate: deleteProject } = useDeleteProject(useProjectsQueryKey());
   const [projectId, setPojectId] = useState<number>();
   // const pinProject = (id: number, pin: boolean) => mutate({ id, pin });
   // 函数柯里化
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
   const editProject = (id: number) => () => startEdit(id);
+
+  const confirmDeleteProject = (id: number) => {
+    Modal.confirm({
+      title: '确定删除这个项目吗?',
+      content: '点击确定删除',
+      okText: '确定',
+      onOk() {
+        deleteProject({ id });
+      },
+    });
+  };
 
   const menu = (
     <Menu
@@ -47,7 +58,11 @@ export const List = ({ users, ...props }: ListProps) => {
         },
         {
           key: 'delete',
-          label: <ButtonNoPadding type="link">删除</ButtonNoPadding>,
+          label: (
+            <ButtonNoPadding type="link" onClick={() => confirmDeleteProject(projectId as number)}>
+              删除
+            </ButtonNoPadding>
+          ),
         },
       ]}
     />
@@ -85,19 +100,13 @@ export const List = ({ users, ...props }: ListProps) => {
         {
           title: '负责人',
           render(value, project) {
-            return (
-              <span>{users.find((user) => user.id === project.personId)?.name || '未知'}</span>
-            );
+            return <span>{users.find((user) => user.id === project.personId)?.name || '未知'}</span>;
           },
         },
         {
           title: '创建时间',
           render(value, project) {
-            return (
-              <span>
-                {project.created ? dayjs(project.created).format('YYYY-MM-DD') : '无'}
-              </span>
-            );
+            return <span>{project.created ? dayjs(project.created).format('YYYY-MM-DD') : '无'}</span>;
           },
         },
         {
