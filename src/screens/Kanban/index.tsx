@@ -8,6 +8,7 @@ import { useTasks } from 'utils/task';
 import CreateKanban from './create-kanban';
 import KanbanColumn from './kanban-column';
 import SearchPanel from './search-panel';
+import { TaskModal } from './task-modal';
 import { useKanbanSearchParams, useProjectInUrl, useTasksSearchParams } from './util';
 interface IProps {}
 const KanbanScreen: React.FC<IProps> = (props) => {
@@ -34,6 +35,7 @@ const KanbanScreen: React.FC<IProps> = (props) => {
           <CreateKanban />
         </ColumnContainer>
       )}
+      <TaskModal />
     </ScreenContainer>
   );
 };
