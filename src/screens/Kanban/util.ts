@@ -21,7 +21,7 @@ export const useTasksSearchParams = () => {
   const [param, setParam] = useUrlQueryParam(['name', 'typeId', 'processorId', 'tagId']);
   const projectId = useProjectIdInUrl();
 
-  const debouncedName = useDebounce(param.name, 200);
+  // const debouncedName = useDebounce(param.name, 200);
 
   return useMemo(() => {
     return {
@@ -29,7 +29,7 @@ export const useTasksSearchParams = () => {
       typeId: +param.typeId || undefined,
       processorId: +param.processorId || undefined,
       tagId: +param.tagId || undefined,
-      name: debouncedName,
+      name: param.name,
     };
   }, [projectId, param]);
 };

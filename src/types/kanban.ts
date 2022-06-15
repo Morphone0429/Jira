@@ -1,5 +1,5 @@
 export interface Kanban {
   id: number;
-  name: string;
+  name: string; ///111
   projectId: number;
 }
