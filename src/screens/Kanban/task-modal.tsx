@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Form, Input, Modal } from 'antd';
-import { useEditTask } from 'utils/task';
+import { useDeleteTask, useEditTask } from 'utils/task';
 import { useTasksModal, useTasksQueryKey } from './util';
 import UserSelect from 'components/user-select';
 import TaskTypeSelect from 'components/task-type-select';
@@ -14,7 +14,7 @@ export const TaskModal = () => {
   const [form] = Form.useForm();
   const { editingTaskId, editingTask, close } = useTasksModal();
   const { mutateAsync: editTask, isLoading: editLoading } = useEditTask(useTasksQueryKey());
-  // const { mutate: deleteTask } = useDeleteTask(useTasksQueryKey());
+  const { mutate: deleteTask } = useDeleteTask(useTasksQueryKey());
 
   const onCancel = () => {
     close();
@@ -26,17 +26,17 @@ export const TaskModal = () => {
     close();
   };
 
-  // const startDelete = () => {
-  //   close();
-  //   Modal.confirm({
-  //     okText: "确定",
-  //     cancelText: "取消",
-  //     title: "确定删除任务吗",
-  //     onOk() {
-  //       return deleteTask({ id: Number(editingTaskId) });
-  //     },
-  //   });
-  // };
+  const startDelete = () => {
+    close();
+    Modal.confirm({
+      okText: '确定',
+      cancelText: '取消',
+      title: '确定删除任务吗',
+      onOk() {
+        return deleteTask({ id: Number(editingTaskId) });
+      },
+    });
+  };
 
   useEffect(() => {
     form.setFieldsValue(editingTask);
@@ -68,13 +68,9 @@ export const TaskModal = () => {
         </Form.Item>
       </Form>
       <div style={{ textAlign: 'right' }}>
-        {/* <Button
-          onClick={startDelete}
-          style={{ fontSize: "14px" }}
-          size={"small"}
-        >
+        <Button onClick={startDelete} style={{ fontSize: '14px' }} size={'small'}>
           删除
-        </Button> */}
+        </Button>
       </div>
     </Modal>
   );

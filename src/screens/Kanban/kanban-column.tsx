@@ -2,12 +2,16 @@ import React from 'react';
 import { Kanban } from 'types/kanban';
 import { useTasks } from 'utils/task';
 import { useTaskTypes } from 'utils/task-type';
-import { useTasksModal, useTasksSearchParams } from './util';
+import { useKanbansQueryKey, useTasksModal, useTasksSearchParams } from './util';
 import bugIcon from 'assets/bug.svg';
 import taskIcon from 'assets/task.svg';
 import styled from '@emotion/styled';
-import { Card } from 'antd';
+import { Button, Card, Modal } from 'antd';
 import CreateTask from './create-task';
+import { Task } from 'types/task';
+import Mark from 'components/mark';
+import { Row } from 'components/lib';
+import { useDeleteKanban } from 'utils/kanban';
 
 interface IProps {
   kanban: Kanban;
@@ -20,22 +24,50 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
   return <img src={name === 'task' ? taskIcon : bugIcon} alt=""></img>;
 };
 
+const TaskCard = ({ task }: { task: Task }) => {
+  const { startEdit } = useTasksModal();
+  const { name: keyword } = useTasksSearchParams();
+
+  return (
+    <Card style={{ marginBottom: '0.5rem', cursor: 'pointer' }} key={task.id} onClick={() => startEdit(task.id)}>
+      <p>
+        <Mark keyword={keyword} name={task.name} />
+      </p>
+      <TaskTypeIcon id={task.typeId} />
+    </Card>
+  );
+};
+
 const KanbanColumn: React.FC<IProps> = (props) => {
   const { kanban } = props;
   const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
 
-  const { startEdit } = useTasksModal();
+  const { mutateAsync } = useDeleteKanban(useKanbansQueryKey());
+
+  const handleDelteKanban = () => {
+    Modal.confirm({
+      okText: '确定',
+      cancelText: '取消',
+      title: '确定删除看板吗',
+      onOk() {
+        return mutateAsync({ id: kanban.id });
+      },
+    });
+  };
 
   return (
     <Container>
-      <h3>{kanban.name}</h3>
+      <Row>
+        <h3>{kanban.name}</h3>
+        <Button type="link" onClick={handleDelteKanban}>
+          删除
+        </Button>
+      </Row>
+
       <TaskContainer>
         {tasks?.map((task) => (
-          <Card style={{ marginBottom: '0.5rem', cursor: 'pointer' }} key={task.id} onClick={() => startEdit(task.id)}>
-            <div> {task.name}</div>
-            <TaskTypeIcon id={task.typeId} />
-          </Card>
+          <TaskCard task={task} />
         ))}
         <CreateTask kanbanId={kanban.id} />
       </TaskContainer>
