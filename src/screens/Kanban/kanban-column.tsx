@@ -7,6 +7,7 @@ import bugIcon from 'assets/bug.svg';
 import taskIcon from 'assets/task.svg';
 import styled from '@emotion/styled';
 import { Card } from 'antd';
+import CreateTask from './create-task';
 
 interface IProps {
   kanban: Kanban;
@@ -33,13 +34,14 @@ const KanbanColumn: React.FC<IProps> = (props) => {
             <TaskTypeIcon id={task.typeId} />
           </Card>
         ))}
+        <CreateTask kanbanId={kanban.id} />
       </TaskContainer>
     </Container>
   );
 };
 export default KanbanColumn;
 
-const Container = styled.div`
+export const Container = styled.div`
   min-width: 27rem;
   border-radius: 6px;
   background-color: rgb(244, 245, 247);
