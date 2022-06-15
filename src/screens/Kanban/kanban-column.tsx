@@ -21,7 +21,7 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
 
 const KanbanColumn: React.FC<IProps> = (props) => {
   const { kanban } = props;
-  const { data: allTasks } = useTasks();
+  const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
   return (
     <Container>
