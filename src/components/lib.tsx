@@ -16,8 +16,7 @@ export const Row = styled.div<{
     //直接子元素
     margin-top: 0 !important;
     margin-bottom: 0 !important;
-    margin-right: ${(props) =>
-      typeof props.gap === 'number' ? props.gap + 'rem' : props.gap ? '2rem' : undefined};
+    margin-right: ${(props) => (typeof props.gap === 'number' ? props.gap + 'rem' : props.gap ? '2rem' : undefined)};
   }
 `;
 
@@ -58,4 +57,11 @@ export const ErrorBox = ({ error }: { error: unknown }) => {
 // no padding button
 export const ButtonNoPadding = styled(Button)`
   padding: 0;
+`;
+
+export const ScreenContainer = styled.div`
+  padding: 3.2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
