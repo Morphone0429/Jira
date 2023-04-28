@@ -1,7 +1,7 @@
 export interface Project {
   id: number;
   name: string;
-  personId: number; /// 1111111s
+  personId: number;
   pin: boolean;
   organization: string;
   created: number;

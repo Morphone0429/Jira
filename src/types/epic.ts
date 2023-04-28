@@ -4,6 +4,6 @@ export interface Epic {
   projectId: number;
   // 开始时间
   start: number;
-  // 结束时间  111111111
+  // 结束时间
   end: number;
 }
