@@ -3,6 +3,6 @@ export interface User {
   name: string;
   email: string;
   title: string; //3
-  organization: string; //2
+  organization: string;
   token: string; //1
 }
