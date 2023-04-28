@@ -5,5 +5,5 @@ export interface Epic {
   // 开始时间
   start: number;
   // 结束时间
-  end: number; //23
+  end: number;
 }
