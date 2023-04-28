@@ -2,7 +2,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  title: string;
-  organization: string;
+  title: string; //3
+  organization: string; //2
   token: string; //1
 }
